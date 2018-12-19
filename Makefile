@@ -27,10 +27,7 @@ terraformplan: terraforminit
 terraformapply: terraformplan
 	terraform apply bcowme.plan
 
-terraformgandiimport:
-	#@echo GANDIDOMAIN $(GANDIDOMAIN)
-	#@echo GANDIID $(GANDIID)
-	#@echo DOMAINUUID $(DOMAINUUID)
+terraformgandiimport: terraforminit
 	terraform import gandi_zone.bcow_me $(DOMAINUUID)
 
 # eof
