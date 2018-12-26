@@ -24,7 +24,7 @@ terraforminit:
 terraformplan: terraforminit
 	terraform plan --out=bcowme.plan
 
-terraformapply: terraformplan
+terraformapply:
 	terraform apply bcowme.plan
 
 terraformgandiimport: terraforminit
