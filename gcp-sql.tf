@@ -1,16 +1,25 @@
-resource "google_sql_database_instance" "master-instance" {
-  name = "master-instance"
+resource "google_sql_database_instance" "fubar-instance" {
+  name = "fubar-instance"
   database_version = "MYSQL_5_7"
   settings {
     tier = "db-f1-micro"
+    ip_configuration {
+      require_ssl = true
+    }
   }
 }
 
 resource "google_sql_database" "fubar" {
   name      = "fubar-db"
-  instance  = "${google_sql_database_instance.master-instance.name}"
+  instance  = "${google_sql_database_instance.fubar-instance.name}"
   charset   = "utf8mb4"
   collation = "utf8mb4_general_ci"
+}
+
+resource "google_sql_user" "fubar-user" {
+  name     = "bcow"
+  instance = "${google_sql_database_instance.fubar-instance.name}"
+  password = "${file("./creds/fubar-db-user.password")}"
 }
 
 resource "google_dns_record_set" "fubardbgcloudbcowme-dnsrs" {
@@ -19,7 +28,7 @@ resource "google_dns_record_set" "fubardbgcloudbcowme-dnsrs" {
   ttl  = 300
   managed_zone = "${google_dns_managed_zone.gcloudbcowme-dnszone.name}"
   rrdatas = [
-        "${google_sql_database_instance.master-instance.ip_address.0.ip_address}"
+        "${google_sql_database_instance.fubar-instance.ip_address.0.ip_address}"
       ]
 }
 
