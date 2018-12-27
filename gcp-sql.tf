@@ -4,9 +4,6 @@ resource "google_sql_database_instance" "fubar-instance" {
   region = "europe-north1"
   settings {
     tier = "db-f1-micro"
-    ip_configuration {
-      require_ssl = true
-    }
   }
 }
 
@@ -17,12 +14,12 @@ resource "google_sql_database" "fubar" {
   collation = "utf8mb4_general_ci"
 }
 
-/*resource "google_sql_user" "fubar-user" {
+resource "google_sql_user" "fubar-user" {
   name = "bcow"
   host = "%"
   instance = "${google_sql_database_instance.fubar-instance.name}"
   password = "${file("./creds/fubar-db-user.password")}"
-}*/
+}
 
 resource "google_dns_record_set" "fubardbgcloudbcowme-dnsrs" {
   name = "fubar-db.${google_dns_managed_zone.gcloudbcowme-dnszone.dns_name}"
